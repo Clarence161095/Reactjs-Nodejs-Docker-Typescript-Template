@@ -13,7 +13,7 @@ export const USER = [
   },
 ];
 
-export const login = (username, password) => {
+export const login = (username: string, password: string) => {
   const index = USER.findIndex(
     (user) => user.username === username && user.password === password,
   );
@@ -23,7 +23,7 @@ export const login = (username, password) => {
   return null;
 };
 
-export const checkToken = (token) => {
+export const checkToken = (token: string) => {
   if (token === '123') {
     return true;
   }

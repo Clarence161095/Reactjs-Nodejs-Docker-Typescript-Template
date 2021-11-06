@@ -1,10 +1,21 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import UserApi from "api/UserApi";
 import LocalStorageService from "utils/LocalStorageService";
 
-const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
+interface UserState {
+  current: any;
+  loading: boolean;
+  error: string;
+}
 
-export const login = createAsyncThunk('user/login',
-  async (params) => {
+const initialState: UserState = {
+  current: {},
+  loading: false,
+  error: ''
+}
+
+export const login: any = createAsyncThunk('user/login',
+  async (params: any) => {
     const currentUser = await UserApi.login(params);
     return currentUser;
   }
@@ -12,22 +23,18 @@ export const login = createAsyncThunk('user/login',
 
 const UserSlice = createSlice({
   name: 'user',
-  initialState: {
-    current: {},
-    loading: false,
-    error: ''
-  },
+  initialState,
   reducers: {},
   extraReducers: {
-    [login.pending]: (state) => {
+    [login.pending]: (state: UserState) => {
       state.loading = true;
     },
-    [login.rejected]: (state, action) => {
+    [login.rejected]: (state: UserState, action: any) => {
       state.loading = false;
       state.error = action.error;
       state.current = {};
     },
-    [login.fulfilled]: (state, action) => {
+    [login.fulfilled]: (state: UserState, action: any) => {
       state.loading = false;
       state.current = action.payload;
       LocalStorageService.setUser(state.current)

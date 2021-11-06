@@ -2,11 +2,7 @@
 import React from 'react';
 import './Dashboard.scss';
 
-Dashboard.propTypes = {
-
-};
-
-function Dashboard(props) {
+function Dashboard(props: any) {
   return (
     <div className="dashboard">
       dashboard

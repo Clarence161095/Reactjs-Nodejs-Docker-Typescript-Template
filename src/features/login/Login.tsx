@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { unwrapResult } from '@reduxjs/toolkit';
-import FormInput from 'components/atoms/form-input/FormInput';
+import FormInput from 'components/elements/form-input/FormInput';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ import { login } from 'store/slice/UserSlice';
 import * as yup from 'yup';
 import './Login.scss';
 
-const SignupSchema = yup.object().shape({
+const SignInSchema = yup.object().shape({
   mail: yup.string().required().email(),
   password: yup.string().required(),
 });
@@ -24,17 +24,17 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(SignupSchema),
+    resolver: yupResolver(SignInSchema),
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     try {
       const actionResult = await dispatch(
         login({ username: data.mail, password: data.password }),
       );
       unwrapResult(actionResult);
       history('/dashboard')
-    } catch (error) {
+    } catch (error: any) {
       setErrorLogin(error.message)
     }
   };

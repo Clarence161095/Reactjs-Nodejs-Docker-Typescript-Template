@@ -1,5 +1,5 @@
+import queryString from 'querystring';
 import axios from 'axios';
-import queryString from 'query-string';
 import LocalStorageService from 'utils/LocalStorageService';
 
 const AxiosClient = axios.create({
@@ -10,7 +10,7 @@ const AxiosClient = axios.create({
   paramsSerializer: params => queryString.stringify(params),
 });
 
-AxiosClient.interceptors.request.use((config) => {
+AxiosClient.interceptors.request.use((config: any) => {
   const token = LocalStorageService.getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -27,7 +27,7 @@ AxiosClient.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   // Handle errors
-  window.location.href('/login');
+  window.location.href = "/login"
 });
 
 export default AxiosClient;

@@ -1,4 +1,6 @@
 .not-found {
+  margin-top: 20px;
+
   .page_404 {
     padding: 40px 0;
     background: #fff;
@@ -10,9 +12,9 @@
   }
 
   .four_zero_four_bg {
-    background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
     height: 400px;
     background-position: center;
+    background-repeat: no-repeat;
 
     display: flex;
     flex-direction: column;
@@ -31,12 +33,24 @@
   }
 
   .link_404 {
-    color: #fff !important;
+    color: #ecf0f1 !important;
     padding: 10px 20px;
-    background: #39ac31;
+    background-color: #27ae60;
+    border: 1px solid #2ecc71;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
     margin: 20px 0;
     display: inline-block;
+    cursor: pointer;
+    min-width: 200px;
+    font-size: 1.5rem;
+
+    &:hover {
+      background-color: #2ecc71;
+      box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
+    }
   }
+
   .content_box_404 {
     margin-top: -50px;
     display: flex;

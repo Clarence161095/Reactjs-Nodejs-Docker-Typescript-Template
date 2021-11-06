@@ -4,6 +4,7 @@ import './FormInput.scss'
 
 FormInput.propTypes = {
   label: PropTypes.string,
+  name: PropTypes.string.isRequired,
   register: PropTypes.func,
   errors: PropTypes.object,
   type: PropTypes.string,
@@ -16,7 +17,7 @@ FormInput.defaultProps = {
   type: 'text',
 };
 
-function FormInput(props) {
+function FormInput(props: any) {
   const { label, name, register, errors, type } = props;
 
   return (

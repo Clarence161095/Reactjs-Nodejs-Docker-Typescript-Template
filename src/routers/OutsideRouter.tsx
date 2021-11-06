@@ -7,7 +7,7 @@ function OutsideRouter() {
     <BrowserRouter>
       <Routes>
 
-        <Route exact path="/" element={<Login />} />
+        <Route path="/" element={<Login />} />
 
         <Route path="/login" element={<Login />} />
 

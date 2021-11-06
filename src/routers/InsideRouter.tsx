@@ -9,7 +9,7 @@ function InsideRouter() {
     <BrowserRouter>
       <Routes>
 
-        <Route exact path="/" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
 
