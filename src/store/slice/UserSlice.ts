@@ -37,8 +37,8 @@ const UserSlice = createSlice({
     [login.fulfilled]: (state: UserState, action: any) => {
       state.loading = false;
       state.current = action.payload;
-      LocalStorageService.setUser(state.current)
-      LocalStorageService.setToken(state.current.token)
+      LocalStorageService.setEncode('user', state.current)
+      LocalStorageService.setEncode('token', state.current.token)
     }
   }
 });

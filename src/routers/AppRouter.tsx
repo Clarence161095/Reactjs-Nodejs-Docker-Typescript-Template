@@ -6,8 +6,9 @@ import OutsideRouter from './OutsideRouter';
 
 function AppRouter() {
   useAppSelector((state) => state.user)
-  
-  const token = LocalStorageService.getToken();
+
+  // const token = LocalStorageService.getToken();
+  const token = LocalStorageService.getDecodeString('token');
   if (token) {
     return (
       <InsideRouter />

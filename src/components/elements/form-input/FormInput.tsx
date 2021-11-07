@@ -1,30 +1,61 @@
-import React from 'react';
+import { WarningOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
 import PropTypes from 'prop-types';
-import './FormInput.scss'
+import React from 'react';
+import { Controller } from 'react-hook-form';
+import './FormInput.scss';
 
 FormInput.propTypes = {
-  label: PropTypes.string,
   name: PropTypes.string.isRequired,
-  register: PropTypes.func,
-  errors: PropTypes.object,
-  type: PropTypes.string,
+  control: PropTypes.object.isRequired,
+  input: PropTypes.object,
 };
 
 FormInput.defaultProps = {
-  label: '',
-  register: null,
-  errors: null,
-  type: 'text',
+  input: {},
 };
 
 function FormInput(props: any) {
-  const { label, name, register, errors, type } = props;
+  const { name, control, input } = props;
+  const { defaultValue, type } = input;
 
   return (
     <div className="form-input">
-      <label>{label}</label>
-      <input type={type} {...register(name)} />
-      {errors[name] && <p>{errors[name]?.message}</p>}
+
+      <Controller
+        name={name}
+        control={control}
+        defaultValue={defaultValue}
+        render={({ field, fieldState }) =>
+        (<>
+
+          {
+            type === 'password' && <Input.Password
+              className={fieldState.error && '--error'}
+              {...input}
+              {...field}
+            />
+          }
+
+          {
+            type !== 'password' && <Input
+              className={fieldState.error && '--error'}
+              {...input}
+              {...field}
+            />
+          }
+
+          {
+            fieldState.error &&
+            <div className="form-input-error">
+              <WarningOutlined className='form-input-error-icon' />
+              <p>{fieldState.error?.message}</p>
+            </div>
+          }
+        </>)
+        }
+      />
+
     </div>
   );
 }

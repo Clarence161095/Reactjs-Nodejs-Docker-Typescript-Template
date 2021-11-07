@@ -1,5 +1,5 @@
-import queryString from 'querystring';
 import axios from 'axios';
+import queryString from 'querystring';
 import LocalStorageService from 'utils/LocalStorageService';
 
 const AxiosClient = axios.create({
@@ -11,7 +11,7 @@ const AxiosClient = axios.create({
 });
 
 AxiosClient.interceptors.request.use((config: any) => {
-  const token = LocalStorageService.getToken();
+  const token = LocalStorageService.getDecodeString('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

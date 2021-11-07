@@ -1,106 +1,121 @@
 .login {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  align-content: stretch;
+  min-height: 100vh;
 
-  width: 100%;
-  min-height: 900px;
+  font-family: sans-serif;
+  background-image: linear-gradient(135deg, #667eea 0, #764ba2 100%) !important;
 
-  background: #ecf0f1;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  &__login-form {
+    display: flex;
+    flex-direction: column;
 
-  form {
-    width: 25%;
-    min-width: 450px;
-    padding: 10px 50px 25px 50px;
-    border-radius: 5px;
-    background-color: #34495e;
-  }
-
-  input {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
+    height: 100%;
+    min-width: 500px !important;
+    background-color: #fff;
     border-radius: 4px;
-    border: 1px solid white;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
 
-  button[type="submit"],
-  input[type="submit"] {
-    background: #2980b9;
-    color: white;
-    text-transform: uppercase;
-    border: none;
-    margin-top: 40px;
-    padding: 20px;
-    font-size: 16px;
-    font-weight: 100;
-    letter-spacing: 10px;
-  }
+    @media only screen and (max-width: 1024px) {
+      /*-- Code for medium screen (Table) written here --*/
+    }
 
-  button[type="submit"]:hover,
-  input[type="submit"]:hover {
-    background: #3498db;
-  }
+    @media only screen and (max-width: 640px) {
+      /*-- Code for small screen (Mobile) written here --*/
+      min-width: 90% !important;
+    }
 
-  button[type="submit"]:active,
-  input[type="button"]:active,
-  input[type="submit"]:active {
-    transition: 0.3s all;
-    transform: translateY(3px);
-    border: 1px solid transparent;
-    opacity: 0.8;
-  }
+    &__title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
 
-  input:disabled {
-    opacity: 0.4;
-  }
+      &__header {
+        font-weight: 400;
+        font-size: 1.5rem;
+        opacity: 0.4;
+        margin: 20px 0 5px 0;
+      }
 
-  input[type="button"]:hover {
-    transition: 0.3s all;
-  }
+      &__description {
+        font-weight: 400;
+        font-size: 1.1rem;
+        opacity: 0.8;
+        margin-bottom: 10px;
+      }
+    }
 
-  button[type="submit"],
-  input[type="button"],
-  input[type="submit"] {
-    -webkit-appearance: none;
-  }
+    &__content {
+      display: flex;
+      flex-direction: column;
+      padding: 0px 15px;
 
-  button[type="button"] {
-    display: block;
-    appearance: none;
-    background: #333;
-    color: white;
-    border: none;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border-radius: 4px;
-  }
+      &__remember-me {
+        margin: 10px 0px 0px 0px !important;
+        color: #495057 !important;
+        opacity: 1;
+      }
 
-  button {
-    display: block;
-    appearance: none;
-    margin-top: 40px;
-    border: 1px solid #333;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border-radius: 4px;
-  }
+      &__divider {
+        margin: 15px 0px 10px 0px !important;
 
-  p {
-    color: #e67e22;
-  }
+        &--full {
+          padding: 0px !important;
+        }
+      }
 
-  p::before {
-    display: inline;
-    content: "⚠ ";
+      &__sign-up {
+        display: flex;
+        flex-direction: row;
+        font-size: 1rem;
+        color: #495057;
+
+        &__btn {
+          padding: 0px !important;
+          font-size: 1rem !important;
+
+          &:hover span,
+          &:focus span {
+            text-decoration: underline;
+            color: #2248a8 !important;
+          }
+        }
+      }
+    }
+
+    &__footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      margin-top: 10px;
+      padding: 20px 15px !important;
+      border-top: 1px solid #e9ecef;
+      background-color: #f8f9fa;
+      border-bottom-right-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+
+      &__btn-login {
+        display: flex;
+        justify-self: center;
+        align-items: center;
+
+        padding: 8px 15px !important;
+        border: 0px;
+        border-radius: 4px;
+        color: #fff;
+        background-color: #3f6ad8;
+        border-color: #3f6ad8;
+        transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+        &:hover {
+          color: #fff;
+          background-color: #2955c8;
+          border-color: #2651be;
+        }
+      }
+    }
   }
 }
