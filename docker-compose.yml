@@ -1,0 +1,63 @@
+version: "3"
+services:
+  front_end:
+    build:
+      context: .
+      dockerfile: ./front_end/docker/Dockerfile
+    volumes:
+      - ./front_end/src:/front_end/src
+    restart: always
+    ports:
+      - 3033:3033
+    depends_on:
+      - back_end
+    networks:
+      - network
+
+  back_end:
+    build:
+      context: .
+      dockerfile: ./back_end/docker/Dockerfile
+    volumes:
+      - ./back_end/src:/back_end/src
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+      - redis
+    links:
+      - postgres
+      - redis
+    networks:
+      - network
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - network
+    restart: unless-stopped
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge
+
+volumes:
+    postgres:
