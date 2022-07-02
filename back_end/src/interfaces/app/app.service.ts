@@ -8,8 +8,4 @@ export default class AppService {
 
     await open(url);
   }
-
-  getHello(): string {
-    return 'Hello world!';
-  }
 }

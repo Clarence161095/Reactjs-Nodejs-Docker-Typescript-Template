@@ -28,7 +28,7 @@ class PaginationUtils {
     return url;
   }
 
-  private static normalizeParam(param? :string): number | false {
+  private static normalizeParam(param?: string): number | false {
     if (param) {
       const tmp = parseInt(param, 10);
 
@@ -41,8 +41,12 @@ class PaginationUtils {
     return false;
   }
 
-  public normalizeParams(params: {number?: string, limit?: string, size?: string }): PaginationParamsInterface | false {
-    const ret: {page: number, limit?: number} = { page: 1 };
+  public normalizeParams(params: {
+    number?: string;
+    limit?: string;
+    size?: string;
+  }): PaginationParamsInterface | false {
+    const ret: { page: number; limit?: number } = { page: 1 };
     if (!params) {
       return ret;
     }
@@ -65,23 +69,30 @@ class PaginationUtils {
     return ret;
   }
 
-  public getPaginationLinks(location: string, paginationParams: PaginationParamsInterface, totalCount: number): any {
-    const pageMax = Math.floor(totalCount / (paginationParams.limit ? paginationParams.limit : commonConstants.pagination.defaultLimit)) + 1;
+  public getPaginationLinks(
+    location: string,
+    paginationParams: PaginationParamsInterface,
+    totalCount: number
+  ): any {
+    const pageMax = Math.floor(
+        totalCount
+          / (paginationParams.limit
+            ? paginationParams.limit
+            : commonConstants.pagination.defaultLimit)
+      ) + 1;
 
     return {
       self: PaginationUtils.buildLink(location, paginationParams),
       first: PaginationUtils.buildLink(location, { page: 1, limit: paginationParams.limit }),
       last: PaginationUtils.buildLink(location, { page: pageMax, limit: paginationParams.limit }),
-      next: PaginationUtils.buildLink(location,
-        {
-          page: paginationParams.page === pageMax ? pageMax : paginationParams.page + 1,
-          limit: paginationParams.limit,
-        }),
-      prev: PaginationUtils.buildLink(location,
-        {
-          page: paginationParams.page === 1 ? 1 : paginationParams.page - 1,
-          limit: paginationParams.limit,
-        }),
+      next: PaginationUtils.buildLink(location, {
+        page: paginationParams.page === pageMax ? pageMax : paginationParams.page + 1,
+        limit: paginationParams.limit,
+      }),
+      prev: PaginationUtils.buildLink(location, {
+        page: paginationParams.page === 1 ? 1 : paginationParams.page - 1,
+        limit: paginationParams.limit,
+      }),
     };
   }
 

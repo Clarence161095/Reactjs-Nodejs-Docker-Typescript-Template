@@ -24,11 +24,11 @@ import AppService from './app.service';
     TypeOrmModule.forRootAsync({
       useFactory: (cfg: ConfigService) => ({
         type: 'postgres',
-        host: cfg.get('POSTGRESQL_HOST') || 'postgres',
-        port: cfg.get('POSTGRESQL_PORT') as unknown as number,
-        database: cfg.get('POSTGRESQL_DB'),
-        username: cfg.get('POSTGRESQL_ROOT_USER'),
-        password: cfg.get('POSTGRESQL_PASSWORD'),
+        host: cfg.get('POSTGRES_HOST') || 'postgres',
+        port: cfg.get('POSTGRES_PORT') as unknown as number,
+        database: cfg.get('POSTGRES_DB'),
+        username: cfg.get('POSTGRES_USER'),
+        password: cfg.get('POSTGRES_PASSWORD'),
         entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: true,
       }),
@@ -43,12 +43,15 @@ import AppService from './app.service';
       inject: [ConfigService],
     }),
     V1Module,
-    MorganModule
+    MorganModule,
   ],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_INTERCEPTOR,
-    useClass: MorganInterceptor("tiny"),
-  }],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: MorganInterceptor('tiny'),
+    },
+  ],
 })
 export default class AppModule {}

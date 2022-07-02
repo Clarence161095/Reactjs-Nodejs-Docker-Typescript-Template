@@ -1,34 +1,28 @@
-import _ from 'lodash';
-import { toast } from 'react-toastify';
-import DEFAULT_ENV from './default-env.core';
-
-const getEnvParam = (name: string) => {
-  return process.env[name] ? process.env[name] : DEFAULT_ENV[`${name}`];
-};
+import CONSTANT from './constant.core';
+import { SpriteSpeedEnum } from './enum.core';
 
 const getGifOnGithub = (name: string) => {
-  return `${getEnvParam('GIF_GITHUB_URL') + name}.gif`;
+  return `${CONSTANT.POKEMON_IMAGE['GIF_GITHUB_URL'] + name}.gif`;
 };
 
-const getPokemonSpriteUrl = ({ id = 151, isBack = false }) => {
-  if (isBack) {
-    return `${getEnvParam('GIF_POKEMON_SPRITE_URL')}animated_24FPS/back/${id}.gif`;
-  } else {
-    return `${getEnvParam('GIF_POKEMON_SPRITE_URL')}animated_24FPS/${id}.gif`;
-  }
+const getPokemonSpriteUrl = ({
+  id = 131,
+  isBack = false,
+  isShiny = true,
+  speed = SpriteSpeedEnum.normal,
+}) => {
+  return `${CONSTANT.POKEMON_IMAGE['GIF_POKEMON_SPRITE_URL']}gen5_${speed}FPS${
+    isBack ? '/back' : ''
+  }${isShiny ? '/shiny' : ''}/${id}.gif`;
 };
 
-const toastDebounce = _.debounce((message) => {
-  toast(message, {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
-}, 500);
+const getImageUrl = (name = 'home/rank.png') => {
+  return `${CONSTANT.POKEMON_IMAGE['IMAGE'] + name}`;
+};
 
-const util = { getGifOnGithub, getPokemonSpriteUrl, toastDebounce };
+const util = {
+  getGifOnGithub,
+  getPokemonSpriteUrl,
+  getImageUrl,
+};
 export default util;

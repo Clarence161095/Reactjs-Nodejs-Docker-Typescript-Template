@@ -1,33 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useRecoilState } from 'recoil';
-import AuthApi from '../api/AuthApi';
-import util from '../core/utilities.core';
+import AuthApi from '../api/auth.api';
 import { DEFAULT_LOGGED_STATE, loggedGlobalState } from '../states/login.state';
 
 export function useLoggedHook() {
   let navigate = useNavigate();
   const [loggedState, setLoggedState] = useRecoilState(loggedGlobalState);
 
+  const checkRole = (type: string) => {
+    switch (type) {
+      case 'general':
+        return loggedState?.role === 'user' || loggedState?.role === 'admin';
+      default:
+        return false;
+    }
+  };
+
   useEffect(() => {
     if (localStorage.getItem('access-token')) {
       const _fetch = async () => {
         try {
-          const resultGetToken: any = await toast.promise(
-            AuthApi.getToken(),
-            {},
-            {
-              position: 'top-right',
-              autoClose: 1500,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            }
-          );
+          const resultGetToken: any = AuthApi.getToken();
 
           if (resultGetToken.data.data.attributes) {
             localStorage.setItem(
@@ -48,16 +43,14 @@ export function useLoggedHook() {
             setLoggedState(DEFAULT_LOGGED_STATE);
           }
         } catch (error) {
-          util.toastDebounce('Vui lòng đăng nhập lại... 🙏');
           navigate('/login');
         }
       };
       _fetch();
     } else {
-      util.toastDebounce('Vui lòng đăng nhập lại... 🙏');
       navigate('/login');
     }
   }, []);
 
-  return [loggedState, setLoggedState];
+  return [loggedState, setLoggedState, checkRole];
 }

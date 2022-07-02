@@ -2,56 +2,55 @@
 import {
   Body,
   Controller,
-  HttpCode,
-  Get,
-  Post,
   Delete,
-  Put,
+  ForbiddenException,
+  Get,
+  HttpCode,
+  HttpStatus,
+  NotFoundException,
   Param,
+  Post,
+  Put,
   Request,
   UnauthorizedException,
   UseGuards,
-  NotFoundException,
-  ForbiddenException,
-  HttpStatus,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiBody,
-  ApiOkResponse,
-  ApiInternalServerErrorResponse,
-  ApiUnauthorizedResponse,
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiBadRequestResponse,
-  ApiConflictResponse,
-  ApiNoContentResponse,
-  ApiExtraModels,
-  getSchemaPath,
-} from '@nestjs/swagger';
-import { JwtService } from '@nestjs/jwt';
-import { Request as ExpressRequest } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiConflictResponse,
+  ApiExtraModels,
+  ApiInternalServerErrorResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+  getSchemaPath
+} from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
 
-import UsersService from '@v1/users/users.service';
-import JwtAccessGuard from '@guards/jwt-access.guard';
-import RolesGuard from '@guards/roles.guard';
-import UserEntity from '@v1/users/schemas/user.entity';
-import { SuccessResponseInterface } from '@interfaces/success-response.interface';
-import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
 import AuthBearer from '@decorators/auth-bearer.decorator';
 import { Roles, RolesEnum } from '@decorators/roles.decorator';
-import authConstants from './auth-constants';
-import { DecodedUser } from './interfaces/decoded-user.interface';
-import LocalAuthGuard from './guards/local-auth.guard';
+import JwtAccessGuard from '@guards/jwt-access.guard';
+import RolesGuard from '@guards/roles.guard';
+import WrapResponseInterceptor from '@interceptors/wrap-response.interceptor';
+import { SuccessResponseInterface } from '@interfaces/success-response.interface';
+import UserEntity from '@v1/users/schemas/user.entity';
+import UsersService from '@v1/users/users.service';
+import ResponseUtils from '../../../utils/response.utils';
 import AuthService from './auth.service';
+import JwtTokensDto from './dto/jwt-tokens.dto';
 import RefreshTokenDto from './dto/refresh-token.dto';
 import SignInDto from './dto/sign-in.dto';
 import SignUpDto from './dto/sign-up.dto';
 import VerifyUserDto from './dto/verify-user.dto';
-import JwtTokensDto from './dto/jwt-tokens.dto';
-import ResponseUtils from '../../../utils/response.utils';
+import LocalAuthGuard from './guards/local-auth.guard';
+import { DecodedUser } from './interfaces/decoded-user.interface';
 
 @ApiTags('Auth')
 @UseInterceptors(WrapResponseInterceptor)
@@ -62,7 +61,7 @@ export default class AuthController {
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
 
   @ApiBody({ type: SignInDto })
@@ -115,10 +114,7 @@ export default class AuthController {
   async signIn(@Request() req: ExpressRequest): Promise<SuccessResponseInterface | never> {
     const user = req.user as UserEntity;
 
-    return ResponseUtils.success(
-      'tokens',
-      await this.authService.login(user),
-    );
+    return ResponseUtils.success('tokens', await this.authService.login(user));
   }
 
   @ApiBody({ type: SignUpDto })
@@ -165,10 +161,7 @@ export default class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @Post('sign-up')
   async signUp(@Body() user: SignUpDto): Promise<SuccessResponseInterface | never> {
-    return ResponseUtils.success(
-      'users',
-      await this.usersService.create(user),
-    );
+    return ResponseUtils.success('users', await this.usersService.create(user));
   }
 
   @ApiOkResponse({
@@ -204,25 +197,21 @@ export default class AuthController {
   @ApiBearerAuth()
   @Post('refresh-token')
   async refreshToken(
-    @Body() refreshTokenDto: RefreshTokenDto,
+    @Body() refreshTokenDto: RefreshTokenDto
   ): Promise<SuccessResponseInterface | never> {
-    const decodedUser = this.jwtService.decode(
-      refreshTokenDto.refreshToken,
-    ) as DecodedUser;
+    const decodedUser = this.jwtService.decode(refreshTokenDto.refreshToken) as DecodedUser;
 
     if (!decodedUser) {
       throw new ForbiddenException('Incorrect token');
     }
 
-    const oldRefreshToken:
-      | string
-      | null = await this.authService.getRefreshTokenByEmail(decodedUser.email);
+    const oldRefreshToken: string | null = await this.authService.getRefreshTokenByEmail(
+      decodedUser.email
+    );
 
     // if the old refresh token is not equal to request refresh token then this user is unauthorized
     if (!oldRefreshToken || oldRefreshToken !== refreshTokenDto.refreshToken) {
-      throw new UnauthorizedException(
-        'Authentication credentials were missing or incorrect',
-      );
+      throw new UnauthorizedException('Authentication credentials were missing or incorrect');
     }
 
     const payload = {
@@ -230,10 +219,7 @@ export default class AuthController {
       email: decodedUser.email,
     };
 
-    return ResponseUtils.success(
-      'tokens',
-      await this.authService.login(payload),
-    );
+    return ResponseUtils.success('tokens', await this.authService.login(payload));
   }
 
   @ApiNoContentResponse({
@@ -261,10 +247,10 @@ export default class AuthController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Put('verify')
-  async verifyUser(@Body() verifyUserDto: VerifyUserDto): Promise<SuccessResponseInterface | never> {
-    const foundUser = await this.usersService.getUnverifiedUserByEmail(
-      verifyUserDto.email,
-    );
+  async verifyUser(
+    @Body() verifyUserDto: VerifyUserDto
+  ): Promise<SuccessResponseInterface | never> {
+    const foundUser = await this.usersService.getUnverifiedUserByEmail(verifyUserDto.email);
 
     if (!foundUser) {
       throw new NotFoundException('The user does not exist');
@@ -272,7 +258,7 @@ export default class AuthController {
 
     return ResponseUtils.success(
       'users',
-      await this.usersService.update(foundUser.id, { verified: true }),
+      await this.usersService.update(foundUser.id, { verified: true })
     );
   }
 
@@ -305,16 +291,14 @@ export default class AuthController {
   async logout(@Param('token') token: string): Promise<{} | never> {
     const decodedUser: DecodedUser | null = await this.authService.verifyToken(
       token,
-      this.configService.get<string>('ACCESS_TOKEN') || '283f01ccce922bcc2399e7f8ded981285963cec349daba382eb633c1b3a5f282',
+      this.configService.get<string>('ACCESS_TOKEN') || '283f01ccce922bcc2399e7f8ded981285963cec349daba382eb633c1b3a5f282'
     );
 
     if (!decodedUser) {
       throw new ForbiddenException('Incorrect token');
     }
 
-    const deletedUsersCount = await this.authService.deleteTokenByEmail(
-      decodedUser.email,
-    );
+    const deletedUsersCount = await this.authService.deleteTokenByEmail(decodedUser.email);
 
     if (deletedUsersCount === 0) {
       throw new NotFoundException();
@@ -373,11 +357,11 @@ export default class AuthController {
   @UseGuards(JwtAccessGuard)
   @Get('token')
   async getUserByAccessToken(
-    @AuthBearer() token: string,
+    @AuthBearer() token: string
   ): Promise<SuccessResponseInterface | never> {
     const decodedUser: DecodedUser | null = await this.authService.verifyToken(
       token,
-      this.configService.get<string>('ACCESS_TOKEN') || '283f01ccce922bcc2399e7f8ded981285963cec349daba382eb633c1b3a5f282',
+      this.configService.get<string>('ACCESS_TOKEN') || '283f01ccce922bcc2399e7f8ded981285963cec349daba382eb633c1b3a5f282'
     );
 
     if (!decodedUser) {
@@ -386,9 +370,6 @@ export default class AuthController {
 
     const { exp, iat, ...user } = decodedUser;
 
-    return ResponseUtils.success(
-      'users',
-      user,
-    );
+    return ResponseUtils.success('users', user);
   }
 }

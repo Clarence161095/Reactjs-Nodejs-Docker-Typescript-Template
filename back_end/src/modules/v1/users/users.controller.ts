@@ -70,9 +70,7 @@ export default class UsersController {
   @Get(':id')
   @UseGuards(JwtAccessGuard)
   @Serialize(AllUsersResponseEntity)
-  async getById(
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<SuccessResponseInterface> {
+  async getById(@Param('id', ParseUUIDPipe) id: string): Promise<SuccessResponseInterface> {
     const foundUser = await this.usersService.getVerifiedUserById(id);
 
     if (!foundUser) {
@@ -107,8 +105,9 @@ export default class UsersController {
   @UseGuards(JwtAccessGuard)
   @Serialize(AllUsersResponseEntity)
   async getAllVerifiedUsers(@Query() query: any) {
-    const paginationParams: PaginationParamsInterface | false =
-      PaginationUtils.normalizeParams(query.page);
+    const paginationParams: PaginationParamsInterface | false = PaginationUtils.normalizeParams(
+      query.page
+    );
     if (!paginationParams) {
       throw new BadRequestException('Invalid pagination parameters');
     }

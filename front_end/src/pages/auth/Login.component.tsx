@@ -1,17 +1,19 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import AuthApi from '../api/AuthApi';
-import { Button, InputForm } from '../components/Material.component';
-import { useLoggedHook } from '../hooks/logged.hook';
-import { DEFAULT_LOGGED_STATE } from '../states/login.state';
+import AuthApi from '../../api/auth.api';
+import { Button, InputForm } from '../../components/Material.component';
+import { useLoggedHook } from '../../hooks/logged.hook';
+import { DEFAULT_LOGGED_STATE } from '../../states/login.state';
+import Register from './Register.component';
 
 function Login() {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isRegister, setIsRegister] = useState(false);
   let navigate = useNavigate();
 
   const [loggedState, setLoggedState] = useLoggedHook();
@@ -23,22 +25,7 @@ function Login() {
     if (localStorage.getItem('access-token')) {
       const _fetch = async () => {
         try {
-          const resultGetToken: any = await toast.promise(
-            AuthApi.getToken(),
-            {
-              success: 'Tự động đăng nhập thành công 👌',
-              error: 'Tự động đăng nhập gặp lỗi!!!! 🤯',
-            },
-            {
-              position: 'top-right',
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            }
-          );
+          const resultGetToken: any = await AuthApi.getToken();
 
           if (resultGetToken.data.data.attributes) {
             localStorage.setItem(
@@ -81,6 +68,15 @@ function Login() {
               pending: 'Đang kiểm tra đăng nhập...⌛',
               success: 'Đăng nhập thành công 👌',
               error: 'Đăng nhập thất bại!!!! 🤯',
+            },
+            {
+              position: 'top-center',
+              autoClose: 700,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
             }
           );
 
@@ -94,11 +90,7 @@ function Login() {
               resultLogin.data.data.attributes['refresh-token']
             );
 
-            const resultGetToken: any = await toast.promise(AuthApi.getToken(), {
-              pending: 'Đang lưu dữ liệu đăng nhập...⌛',
-              success: 'Dữ liệu đăng nhập đã được lưu lại. 👌',
-              error: 'Dữ liệu đăng có vấn đề!!!! 🤯',
-            });
+            const resultGetToken: any = await AuthApi.getToken();
 
             if (resultGetToken.data.data.attributes) {
               localStorage.setItem(
@@ -139,7 +131,7 @@ function Login() {
     if (userName === '') {
       return '';
     }
-    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userName))
+    if (!/^\w+([\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(userName))
       return 'Tên đăng nhập phải là email.';
     return '';
   };
@@ -174,44 +166,55 @@ function Login() {
         className="flex flex-col justify-center items-center border-2 rounded-xl
           px-4 py-3 w-[95%] max-w-md bg-[#130f406d]"
       >
-        <div className="text-[2.5rem]">Đăng nhập</div>
+        {!isRegister && (
+          <>
+            <div className="text-[2.5rem]">Đăng nhập</div>
 
-        <InputForm
-          InputAttributes={{
-            type: 'text',
-            alt: 'username',
-            placeholder: 'Tên đăng nhập/Email',
-            value: userName,
-            onKeyDown: handleKeyDown,
-            onChange: (e: any) => setUserName(e.target.value),
-          }}
-          checkValidate={checkValidateUser}
-        />
+            <InputForm
+              InputAttributes={{
+                type: 'text',
+                alt: 'username',
+                placeholder: 'Tên đăng nhập/Email',
+                value: userName,
+                onKeyDown: handleKeyDown,
+                onChange: (e: any) => setUserName(e.target.value),
+              }}
+              checkValidate={checkValidateUser}
+            />
 
-        <InputForm
-          InputAttributes={{
-            type: 'password',
-            alt: 'password',
-            placeholder: 'Mật khẩu',
-            value: password,
-            onKeyDown: handleKeyDown,
-            onChange: (e: any) => setPassword(e.target.value),
-          }}
-          checkValidate={checkValidatePassword}
-        />
+            <InputForm
+              InputAttributes={{
+                type: 'password',
+                alt: 'password',
+                placeholder: 'Mật khẩu',
+                value: password,
+                onKeyDown: handleKeyDown,
+                onChange: (e: any) => setPassword(e.target.value),
+              }}
+              checkValidate={checkValidatePassword}
+            />
 
-        <div className="flex flex-row justify-center items-center mt-1">
-          <Button
-            InputAttributes={{
-              disabled: !checkDisabledButton(),
-              onClick: handleLogin,
-            }}
-          >
-            Đăng nhập
-          </Button>
-          <Button className="bg-[#27ae60] ml-4">Đăng ký</Button>
-        </div>
-        <span className="w-full text-orange-400 text-center">{errorMessage}</span>
+            <div className="flex flex-row justify-center items-center my-2">
+              <Button className="bg-[#27ae60]" onClick={() => setIsRegister(true)}>
+                Đăng ký
+              </Button>
+              <Button
+                className="ml-6"
+                InputAttributes={{
+                  disabled: !checkDisabledButton(),
+                }}
+                onClick={handleLogin}
+              >
+                Đăng nhập
+              </Button>
+            </div>
+            <span className="w-full text-orange-400 text-center">
+              {errorMessage}
+            </span>
+          </>
+        )}
+
+        {isRegister && <Register setIsRegister={setIsRegister} />}
       </div>
     </div>
   );

@@ -10,8 +10,7 @@ import UsersRepository from './users.repository';
 
 @Injectable()
 export default class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {
-  }
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   public async create(user: SignUpDto): Promise<UserEntity> {
     const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -51,7 +50,7 @@ export default class UsersService {
   }
 
   public async getAllVerifiedWithPagination(
-    options: PaginationParamsInterface,
+    options: PaginationParamsInterface
   ): Promise<PaginatedUsersInterface> {
     return this.usersRepository.getAllVerifiedWithPagination(options);
   }

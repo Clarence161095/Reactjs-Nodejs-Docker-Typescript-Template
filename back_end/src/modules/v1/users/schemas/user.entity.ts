@@ -1,7 +1,13 @@
 import { RolesEnum } from '@decorators/roles.decorator';
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  Column, Entity, Index, PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('users')
@@ -26,4 +32,14 @@ export default class UserEntity {
   @ApiProperty({ type: String, default: RolesEnum.user, enum: RolesEnum })
   @Column({ type: 'enum', enum: RolesEnum, default: RolesEnum.user })
   readonly role: RolesEnum = RolesEnum.user;
+
+  // Auto Generations properties
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
 }

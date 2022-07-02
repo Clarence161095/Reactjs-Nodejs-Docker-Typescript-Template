@@ -1,7 +1,7 @@
 import * as Redis from 'ioredis';
 
-import { Injectable } from '@nestjs/common';
 import { RedisService } from '@liaoliaots/nestjs-redis';
+import { Injectable } from '@nestjs/common';
 
 import authConstants from './auth-constants';
 
@@ -18,7 +18,7 @@ export default class AuthRepository {
       email,
       token,
       'EX',
-      authConstants.redis.expirationTime.jwt.refreshToken,
+      authConstants.redis.expirationTime.jwt.refreshToken
     );
   }
 

@@ -1,21 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Route, Routes } from 'react-router-dom';
 import { useLoggedHook } from '../hooks/logged.hook';
-import Home from '../pages/Home.component';
-import Loading from '../pages/Loading.component';
-import Login from '../pages/Login.component';
+import Login from '../pages/auth/Login.component';
+import Loading from '../pages/common/Loading.component';
+import Home from '../pages/home/Home.component';
 
 function RootRouter() {
-  const [loggedState] = useLoggedHook();
-
-  const checkRole = (type: string) => {
-    switch (type) {
-      case 'general':
-        return loggedState?.role === 'user' || loggedState?.role === 'admin';
-      default:
-        return false;
-    }
-  };
+  const [_, __, checkRole] = useLoggedHook();
 
   return (
     <Routes>

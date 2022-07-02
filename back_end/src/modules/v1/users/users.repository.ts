@@ -1,10 +1,10 @@
+import { PaginatedUsersInterface } from '@interfaces/paginatedEntity.interface';
+import { PaginationParamsInterface } from '@interfaces/pagination-params.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm/index';
-import SignUpDto from '@v1/auth/dto/sign-up.dto';
-import { PaginationParamsInterface } from '@interfaces/pagination-params.interface';
-import { PaginatedUsersInterface } from '@interfaces/paginatedEntity.interface';
 import PaginationUtils from '@utils/pagination.utils';
+import SignUpDto from '@v1/auth/dto/sign-up.dto';
+import { Repository, UpdateResult } from 'typeorm/index';
 import UpdateUserDto from './dto/update-user.dto';
 import UserEntity from './schemas/user.entity';
 
@@ -12,7 +12,7 @@ import UserEntity from './schemas/user.entity';
 export default class UsersRepository {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly usersModel: Repository<UserEntity>,
+    private readonly usersModel: Repository<UserEntity>
   ) {}
 
   public create(user: SignUpDto): Promise<UserEntity> {
@@ -32,9 +32,7 @@ export default class UsersRepository {
     });
   }
 
-  public async getVerifiedUserByEmail(
-    email: string,
-  ): Promise<UserEntity | undefined> {
+  public async getVerifiedUserByEmail(email: string): Promise<UserEntity | undefined> {
     return this.usersModel.findOne({
       where: [
         {
@@ -45,9 +43,7 @@ export default class UsersRepository {
     });
   }
 
-  public async getUnverifiedUserByEmail(
-    email: string,
-  ): Promise<UserEntity | undefined> {
+  public async getUnverifiedUserByEmail(email: string): Promise<UserEntity | undefined> {
     return this.usersModel.findOne({
       where: [
         {
@@ -79,7 +75,7 @@ export default class UsersRepository {
   }
 
   public async getAllVerifiedWithPagination(
-    options: PaginationParamsInterface,
+    options: PaginationParamsInterface
   ): Promise<PaginatedUsersInterface> {
     const verified = true;
     const [users, totalCount] = await Promise.all([

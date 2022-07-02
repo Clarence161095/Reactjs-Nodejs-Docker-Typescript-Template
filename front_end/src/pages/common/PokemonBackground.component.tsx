@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import _ from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
-import CONSTANT from '../core/constant.core';
-import util from '../core/utilities.core';
+import CONSTANT from '../../core/constant.core';
+import util from '../../core/utilities.core';
 
 const PokemonImage = (props: any) => {
   const pokemonId = useRef(_.random(1, 649));
@@ -25,7 +25,7 @@ const PokemonImage = (props: any) => {
   };
   useEffect(() => {
     const _condition = _.random(1, 8);
-    const speed = CONSTANT.SPEED_OF_POKEMON_BACKGROUND;
+    const speed = CONSTANT.POKEMON_BACKGROUND.SPEED_OF_POKEMON_BACKGROUND;
     calculatePosition();
     switch (_condition) {
       case 1:
@@ -75,7 +75,7 @@ const PokemonImage = (props: any) => {
   return (
     <div>
       <img
-        className={`opacity-[0.18]`}
+        className={`opacity-[0.2] scale-150`}
         src={util.getPokemonSpriteUrl({
           id: pokemonId.current,
           isBack: isBack.current,
@@ -86,7 +86,7 @@ const PokemonImage = (props: any) => {
           left: `${position.current.x}%`,
           top: `${position.current.y}%`,
           transition: `all ${
-            CONSTANT.TIME_SPEED_OF_POKEMON_BACKGROUND * 1.5
+            CONSTANT.POKEMON_BACKGROUND.TIME_SPEED_OF_POKEMON_BACKGROUND * 1.5
           }s linear`,
           width: 'auto',
         }}
@@ -100,7 +100,7 @@ const PokemonBackground = (props: any) => {
   useEffect(() => {
     setInterval(() => {
       setPosition(_.random(1, 10000));
-    }, CONSTANT.TIME_SPEED_OF_POKEMON_BACKGROUND * 1000);
+    }, CONSTANT.POKEMON_BACKGROUND.TIME_SPEED_OF_POKEMON_BACKGROUND * 1000);
   }, []);
 
   return (

@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Type } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 
 const DtoFactory = {
   wrap<T>(responseDto: T): Type<unknown> {

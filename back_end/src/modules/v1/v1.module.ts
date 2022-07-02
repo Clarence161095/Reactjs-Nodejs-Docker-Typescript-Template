@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
-import { Routes, RouterModule } from '@nestjs/core';
-import { SampleModule } from './sample/sample.module';
+import { RouterModule, Routes } from '@nestjs/core';
 
 import AuthModule from './auth/auth.module';
 import UsersModule from './users/users.module';
@@ -16,11 +15,6 @@ const routes: Routes = [
 ];
 
 @Module({
-  imports: [
-    RouterModule.register(routes),
-    AuthModule,
-    UsersModule,
-    SampleModule,
-  ],
+  imports: [RouterModule.register(routes), AuthModule, UsersModule],
 })
 export default class V1Module {}
