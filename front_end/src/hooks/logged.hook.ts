@@ -13,7 +13,7 @@ export function useLoggedHook() {
     if (localStorage.getItem('access-token')) {
       const _fetch = async () => {
         try {
-          const resultGetToken: any = AuthApi.getToken();
+          const resultGetToken: any = await AuthApi.getToken();
 
           if (resultGetToken.data.data.attributes) {
             localStorage.setItem(

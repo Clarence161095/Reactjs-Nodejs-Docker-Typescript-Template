@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Route, Routes } from 'react-router-dom';
+import { LoadingCmp } from '../components/Material.component';
 import { useCheckRole } from '../hooks/checkRole.hook';
 import Login from '../pages/auth/Login.component';
 import Loading from '../pages/common/Loading.component';
@@ -15,7 +16,7 @@ function RootRouter() {
           <Route path="/home" element={<Home />} />
         </>
       )}
-      <Route path="*" element={<Home />} />
+      <Route path="*" element={<Login />} />
       <Route path="/loading" element={<Loading />} />
       <Route path="/login" element={<Login />} />
     </Routes>
