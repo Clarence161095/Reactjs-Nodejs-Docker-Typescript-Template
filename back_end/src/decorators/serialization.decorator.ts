@@ -2,6 +2,7 @@ import SerializeInterceptor from '@interceptors/serialization.interceptor';
 import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 
 const SERIALIZE_TYPE_KEY = 'SerializeTypeKey tuan.nguyen, 5 days ago   (May 3rd, 2022 3:36 PM)';
+
 export function getSerializeType(target: any): any {
   return Reflect.getMetadata(SERIALIZE_TYPE_KEY, target) as any;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from 'react';
 
@@ -75,8 +76,6 @@ function MenuCmp(props: any) {
                 {item.name}
               </li>
             );
-          } else {
-            return <></>;
           }
         })}
       </ul>

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Route, Routes } from 'react-router-dom';
-import { useLoggedHook } from '../hooks/logged.hook';
+import { useCheckRole } from '../hooks/checkRole.hook';
 import Login from '../pages/auth/Login.component';
 import Loading from '../pages/common/Loading.component';
 import Home from '../pages/home/Home.component';
 
 function RootRouter() {
-  const [_, __, checkRole] = useLoggedHook();
+  const [checkRole] = useCheckRole();
 
   return (
     <Routes>

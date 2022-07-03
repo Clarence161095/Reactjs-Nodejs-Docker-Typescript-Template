@@ -5,23 +5,16 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import MenuCmp from './components/Menu.component';
 import CONSTANT from './core/constant.core';
+import { useCheckRole } from './hooks/checkRole.hook';
 import { useLoggedHook } from './hooks/logged.hook';
 import PokemonBackground from './pages/common/PokemonBackground.component';
 import RootRouter from './routers/Root.router';
 import { DEFAULT_LOGGED_STATE } from './states/login.state';
 
-const ListSetting = (listSettingProps: any) => {
+const OutSideSetting = (listSettingProps: any) => {
   const isShow = useRef(listSettingProps.backGroundPokemon);
 
   return [
-    {
-      name: 'Setting 2',
-      onClick: () => {},
-    },
-    {
-      name: 'Setting 3',
-      onClick: () => {},
-    },
     {
       name: 'ON/OFF Background',
       onClick: (_props: any) => {
@@ -37,11 +30,12 @@ const ListSetting = (listSettingProps: any) => {
 
 function App() {
   const [backGroundPokemon, setBackGroundPokemon] = useState(false);
-  const [_, setLoggedState, checkRole] = useLoggedHook();
+  const [_, setLoggedState] = useLoggedHook();
+  const [checkRole] = useCheckRole();
 
   const [setting, setSetting] = useState({
     isOpen: false,
-    listSetting: ListSetting({
+    OutSideSetting: OutSideSetting({
       setBackGroundPokemon,
     }),
   });
@@ -58,7 +52,7 @@ function App() {
 
       <MenuCmp
         listMenu={[
-          ...setting.listSetting,
+          ...setting.OutSideSetting,
           checkRole('general')
             ? {
                 name: 'Logout',

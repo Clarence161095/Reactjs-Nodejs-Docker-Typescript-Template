@@ -9,15 +9,6 @@ export function useLoggedHook() {
   let navigate = useNavigate();
   const [loggedState, setLoggedState] = useRecoilState(loggedGlobalState);
 
-  const checkRole = (type: string) => {
-    switch (type) {
-      case 'general':
-        return loggedState?.role === 'user' || loggedState?.role === 'admin';
-      default:
-        return false;
-    }
-  };
-
   useEffect(() => {
     if (localStorage.getItem('access-token')) {
       const _fetch = async () => {
@@ -52,5 +43,5 @@ export function useLoggedHook() {
     }
   }, []);
 
-  return [loggedState, setLoggedState, checkRole];
+  return [loggedState, setLoggedState];
 }
