@@ -41,14 +41,12 @@ function App() {
   });
 
   return (
-    <div className="relative flex flex-col min-h-screen text-white px-2 z-50 bg-[#192a56]">
-      <div className="flex flex-row justify-end">
-        <i
-          className="absolute bi bi-gear p-[9px] text-2xl hover:scale-[1.3]
+    <div className="relative flex flex-col min-h-screen text-white z-50 bg-[#192a56]">
+      <i
+        className="fixed right-2 bottom-1 z-50 bi bi-gear p-[9px] text-2xl hover:scale-[1.3]
                 hover:cursor-pointer"
-          onClick={() => setSetting({ ...setting, isOpen: !setting.isOpen })}
-        ></i>
-      </div>
+        onClick={() => setSetting({ ...setting, isOpen: !setting.isOpen })}
+      ></i>
 
       <MenuCmp
         listMenu={[
@@ -66,6 +64,7 @@ function App() {
         ]}
         closeMenu={() => setSetting({ ...setting, isOpen: false })}
         toggleMenu={setting.isOpen}
+        style={{ x: -500, y: -3000, bgColor: '#8e44ad' }}
       />
 
       {backGroundPokemon && (

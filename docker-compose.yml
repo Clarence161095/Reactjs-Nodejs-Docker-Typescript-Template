@@ -6,6 +6,7 @@ services:
       dockerfile: ./front_end/docker/Dockerfile
     volumes:
       - ./front_end/src:/front_end/src
+      - ./front_end/public:/front_end/public
     restart: always
     ports:
       - ${CLIENT_PUBLIC_PORT}:4000

@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import AuthApi from '../api/auth.api';
 import { DEFAULT_LOGGED_STATE, loggedGlobalState } from '../states/login.state';
 
 export function useLoggedHook() {
-  let navigate = useNavigate();
   const [loggedState, setLoggedState] = useRecoilState(loggedGlobalState);
 
   useEffect(() => {
@@ -34,12 +32,14 @@ export function useLoggedHook() {
             setLoggedState(DEFAULT_LOGGED_STATE);
           }
         } catch (error) {
-          navigate('/login');
+          setLoggedState(DEFAULT_LOGGED_STATE);
+          localStorage.clear();
         }
       };
       _fetch();
     } else {
-      navigate('/login');
+      setLoggedState(DEFAULT_LOGGED_STATE);
+      localStorage.clear();
     }
   }, []);
 

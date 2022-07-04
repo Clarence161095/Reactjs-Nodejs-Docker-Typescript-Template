@@ -25,10 +25,14 @@ function MenuCmp(props: any) {
   }, [props.toggleMenu]);
 
   const styles = {
-    show: {},
+    show: {
+      backgroundColor: props?.style?.bgColor,
+    },
     hidden: {
       opacity: '0.00001',
-      transform: 'scale(0.1) rotate(180deg) translate(-500%, 2000%)',
+      transform: `scale(0.1) rotate(180deg) translate(${
+        props?.style?.x ? props?.style?.x : -500
+      }%, ${props?.style?.y ? props?.style?.y : 2000}%)`,
     },
   };
 

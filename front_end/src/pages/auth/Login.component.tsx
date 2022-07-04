@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AuthApi from '../../api/auth.api';
 import { Button, InputForm } from '../../components/Material.component';
@@ -15,12 +15,12 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isRegister, setIsRegister] = useState(false);
   let navigate = useNavigate();
-
   const [loggedState, setLoggedState] = useLoggedHook();
+  let location = useLocation();
 
   useEffect(() => {
     if (loggedState.logged) {
-      navigate('/home');
+      navigate(location.pathname);
     }
     if (localStorage.getItem('access-token')) {
       const _fetch = async () => {
@@ -42,11 +42,12 @@ function Login() {
               role: resultGetToken.data.data.attributes['role'],
               logged: true,
             });
-            navigate('/home');
+            navigate(location.pathname);
           } else {
             setLoggedState(DEFAULT_LOGGED_STATE);
           }
         } catch (error) {
+          setLoggedState(DEFAULT_LOGGED_STATE);
           localStorage.clear();
         }
       };
