@@ -1,8 +1,4 @@
-/* eslint-disable no-undef */
-/* eslint-disable comma-dangle */
-/* eslint-disable quotes */
-import { RedisModule } from '@liaoliaots/nestjs-redis';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -24,26 +20,17 @@ import AppService from './app.service';
     TypeOrmModule.forRootAsync({
       useFactory: (cfg: ConfigService) => ({
         type: 'postgres',
-        host: cfg.get('POSTGRES_HOST') || 'postgres',
-        port: cfg.get('POSTGRES_PORT') as unknown as number,
-        database: cfg.get('POSTGRES_DB'),
-        username: cfg.get('POSTGRES_USER'),
-        password: cfg.get('POSTGRES_PASSWORD'),
+        url:
+          cfg.get('DATABASE_URL') ||
+          'postgresql://postgres_sample_user:postgres_password@localhost:4002',
         entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: true,
+        ssl: { rejectUnauthorized: false },
       }),
       inject: [ConfigService],
     }),
-    RedisModule.forRootAsync({
-      useFactory: (cfg: ConfigService) => ({
-        config: {
-          url: cfg.get('REDIS_URL'),
-        },
-      }),
-      inject: [ConfigService],
-    }),
-    V1Module,
     MorganModule,
+    V1Module,
   ],
   controllers: [AppController],
   providers: [

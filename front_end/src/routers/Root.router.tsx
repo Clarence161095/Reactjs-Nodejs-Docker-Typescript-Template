@@ -1,25 +1,46 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useCheckRole } from '../hooks/checkRole.hook';
-import Login from '../pages/auth/Login.component';
 import Loading from '../pages/common/Loading.component';
-import NotFoundCmp from '../pages/common/NotFound.component';
-import Home from '../pages/home/Home.component';
 
-function RootRouter() {
+function RequireAuth({ children }: { children: JSX.Element }) {
   const [checkRole] = useCheckRole();
 
+  if (!checkRole('general')) {
+    if (localStorage.getItem('access-token')) {
+      return <Loading />;
+    } else {
+      return <Login />;
+    }
+  }
+
+  return <React.Suspense fallback={<Loading />}>{children}</React.Suspense>;
+}
+
+const Login = React.lazy(() => import('../pages/auth/Login.component'));
+const Home = React.lazy(() => import('../pages/home/Home.component'));
+
+function RootRouter() {
   return (
     <Routes>
-      {checkRole('general') && (
-        <>
-          <Route path="/home" element={<Home />} />
-          <Route path="*" element={<Home />} />
-        </>
-      )}
-      <Route path="/loading" element={<Loading />} />
+      <Route
+        path="/home"
+        element={
+          <RequireAuth>
+            <Home />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <RequireAuth>
+            <Home />
+          </RequireAuth>
+        }
+      />
       <Route path="/login" element={<Login />} />
-      {!checkRole('general') && <Route path="*" element={<Login />} />}
     </Routes>
   );
 }

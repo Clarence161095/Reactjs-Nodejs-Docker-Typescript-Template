@@ -1,12 +1,12 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useRecoilState } from 'recoil';
 import AuthApi from '../../api/auth.api';
 import { Button, InputForm } from '../../components/Material.component';
-import { useLoggedHook } from '../../hooks/logged.hook';
-import { DEFAULT_LOGGED_STATE } from '../../states/login.state';
+import { DEFAULT_LOGGED_STATE, loggedGlobalState } from '../../states/login.state';
 import Register from './Register.component';
 
 function Login() {
@@ -15,12 +15,11 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isRegister, setIsRegister] = useState(false);
   let navigate = useNavigate();
-  const [loggedState, setLoggedState] = useLoggedHook();
-  let location = useLocation();
+  const [loggedState, setLoggedState] = useRecoilState(loggedGlobalState);
 
   useEffect(() => {
     if (loggedState.logged) {
-      navigate(location.pathname);
+      navigate('/home');
     }
     if (localStorage.getItem('access-token')) {
       const _fetch = async () => {
@@ -42,7 +41,7 @@ function Login() {
               role: resultGetToken.data.data.attributes['role'],
               logged: true,
             });
-            navigate(location.pathname);
+            navigate('/home');
           } else {
             setLoggedState(DEFAULT_LOGGED_STATE);
           }
@@ -52,6 +51,9 @@ function Login() {
         }
       };
       _fetch();
+    } else {
+      setLoggedState(DEFAULT_LOGGED_STATE);
+      localStorage.clear();
     }
   }, []);
 

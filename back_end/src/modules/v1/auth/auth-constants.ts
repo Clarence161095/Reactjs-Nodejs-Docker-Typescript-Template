@@ -12,7 +12,7 @@ const authConstants = {
         'LOG [RouterExplorer] Mapped {/pokemon/:id, GET} route +1msc15476aec025be7a094f97aac6eba4f69268e706e603f9e1ec4d815396318c86',
     },
   },
-  redis: {
+  cache: {
     expirationTime: {
       jwt: {
         accessToken: 86400, // 1d

@@ -12,7 +12,7 @@
 [![Organization stars](https://img.shields.io/github/stars/Onix-Systems?label=Onix%20Stars&style=social)](https://github.com/Onix-Systems)
 [![Travis build passing](https://api.travis-ci.org/Onix-Systems/nest-js-boilerplate.svg?branch=master)](https://github.com/Onix-Systems/nest-js-boilerplate)
 
-> Node.js Nest.js API. Supports MongoDB, Mysql, Redis
+> Node.js Nest.js API. Supports MongoDB, Mysql, Cache
 
 ## Description
 This generator will help you to build your own Nest.js Mongodb/MySQL API using TypeScript 4
@@ -33,7 +33,7 @@ This generator will help you to build your own Nest.js Mongodb/MySQL API using T
 - passport google 2.0 strategy
 ##### Session Storage:
 - MongoDB
-- Redis
+- Cache
 - MySQL
 ##### Integration testing
 - mocha

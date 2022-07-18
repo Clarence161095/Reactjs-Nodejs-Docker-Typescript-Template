@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
@@ -20,6 +20,7 @@ import AuthService from './auth.service';
     JwtModule.register({
       secret: authConstants.jwt.secret,
     }),
+    CacheModule.register(),
   ],
   providers: [AuthService, LocalStrategy, JwtAccessStrategy, JwtRefreshStrategy, AuthRepository],
   controllers: [AuthController],

@@ -18,11 +18,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
 
-  const port = configService.get<number>('SERVER_PUBLIC_PORT') || 3000;
+  const port = configService.get<number>('PORT') || 40011;
 
   const options = new DocumentBuilder()
     .setTitle('Api v1')
-    .setDescription('The boilerplate API for nestjs devs')
+    .setDescription('The boilerplate API for nestjs devs.')
     .setVersion('1.0')
     .addBearerAuth({ in: 'header', type: 'http' })
     .build();
@@ -31,7 +31,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(port, async () => {
-    console.log(`The server is running on ${port} port: http://localhost:${port}/api`);
+    console.log(`The server is running on ${port} port`);
   });
 }
 bootstrap();

@@ -1,36 +1,26 @@
-import * as Redis from 'ioredis';
-
-import { RedisService } from '@liaoliaots/nestjs-redis';
-import { Injectable } from '@nestjs/common';
-
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import authConstants from './auth-constants';
 
 @Injectable()
 export default class AuthRepository {
-  private readonly redisClient: Redis.Redis;
-
-  constructor(private readonly redisService: RedisService) {
-    this.redisClient = redisService.getClient();
-  }
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   public async addRefreshToken(email: string, token: string): Promise<void> {
-    await this.redisClient.set(
-      email,
-      token,
-      'EX',
-      authConstants.redis.expirationTime.jwt.refreshToken
-    );
+    await this.cacheManager.set(email, token, {
+      ttl: authConstants.cache.expirationTime.jwt.refreshToken,
+    });
   }
 
-  public getToken(key: string): Promise<string | null> {
-    return this.redisClient.get(key);
+  public async getToken(key: string): Promise<any> {
+    return await this.cacheManager.get(key);
   }
 
-  public removeToken(key: string): Promise<number> {
-    return this.redisClient.del(key);
+  public async removeToken(key: string): Promise<number> {
+    return await this.cacheManager.del(key);
   }
 
-  public removeAllTokens(): Promise<string> {
-    return this.redisClient.flushall();
+  public async removeAllTokens(): Promise<any> {
+    return await this.cacheManager.reset();
   }
 }

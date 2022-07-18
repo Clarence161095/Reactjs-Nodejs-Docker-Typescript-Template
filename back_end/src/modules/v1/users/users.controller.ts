@@ -80,45 +80,45 @@ export default class UsersController {
     return ResponseUtils.success('users', foundUser);
   }
 
-  @ApiOkResponse({
-    schema: {
-      type: 'object',
-      properties: {
-        data: {
-          $ref: getSchemaPath(UserEntity),
-        },
-      },
-    },
-    description: '200. Success. Returns all users',
-  })
-  @ApiUnauthorizedResponse({
-    schema: {
-      type: 'object',
-      example: {
-        message: 'string',
-      },
-    },
-    description: '401. UnauthorizedException.',
-  })
-  @Get()
-  @Roles(RolesEnum.admin)
-  @UseGuards(JwtAccessGuard)
-  @Serialize(AllUsersResponseEntity)
-  async getAllVerifiedUsers(@Query() query: any) {
-    const paginationParams: PaginationParamsInterface | false = PaginationUtils.normalizeParams(
-      query.page
-    );
-    if (!paginationParams) {
-      throw new BadRequestException('Invalid pagination parameters');
-    }
+  // @ApiOkResponse({
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       data: {
+  //         $ref: getSchemaPath(UserEntity),
+  //       },
+  //     },
+  //   },
+  //   description: '200. Success. Returns all users',
+  // })
+  // @ApiUnauthorizedResponse({
+  //   schema: {
+  //     type: 'object',
+  //     example: {
+  //       message: 'string',
+  //     },
+  //   },
+  //   description: '401. UnauthorizedException.',
+  // })
+  // @Get()
+  // @Roles(RolesEnum.admin)
+  // @UseGuards(JwtAccessGuard)
+  // @Serialize(AllUsersResponseEntity)
+  // async getAllVerifiedUsers(@Query() query: any) {
+  //   const paginationParams: PaginationParamsInterface | false = PaginationUtils.normalizeParams(
+  //     query.page
+  //   );
+  //   if (!paginationParams) {
+  //     throw new BadRequestException('Invalid pagination parameters');
+  //   }
 
-    const paginatedUsers: PaginatedUsersInterface =
-      await this.usersService.getAllVerifiedWithPagination(paginationParams);
+  //   const paginatedUsers: PaginatedUsersInterface =
+  //     await this.usersService.getAllVerifiedWithPagination(paginationParams);
 
-    return ResponseUtils.success('users', paginatedUsers.paginatedResult, {
-      location: 'users',
-      paginationParams,
-      totalCount: paginatedUsers.totalCount,
-    });
-  }
+  //   return ResponseUtils.success('users', paginatedUsers.paginatedResult, {
+  //     location: 'users',
+  //     paginationParams,
+  //     totalCount: paginatedUsers.totalCount,
+  //   });
+  // }
 }

@@ -205,7 +205,7 @@ export default class AuthController {
       throw new ForbiddenException('Incorrect token');
     }
 
-    const oldRefreshToken: string | null = await this.authService.getRefreshTokenByEmail(
+    const oldRefreshToken: any = await this.authService.getRefreshTokenByEmail(
       decodedUser.email
     );
 
@@ -291,7 +291,7 @@ export default class AuthController {
   async logout(@Param('token') token: string): Promise<{} | never> {
     const decodedUser: DecodedUser | null = await this.authService.verifyToken(
       token,
-      this.configService.get<string>('ACCESS_TOKEN') || '283f01ccce922bcc2399e7f8ded981285963cec349daba382eb633c1b3a5f282'
+      this.configService.get<string>('ACCESS_TOKEN') || 'this.authService.verifyToken'
     );
 
     if (!decodedUser) {
@@ -361,7 +361,7 @@ export default class AuthController {
   ): Promise<SuccessResponseInterface | never> {
     const decodedUser: DecodedUser | null = await this.authService.verifyToken(
       token,
-      this.configService.get<string>('ACCESS_TOKEN') || '283f01ccce922bcc2399e7f8ded981285963cec349daba382eb633c1b3a5f282'
+      this.configService.get<string>('ACCESS_TOKEN') || 'this.authService.verifyToken'
     );
 
     if (!decodedUser) {

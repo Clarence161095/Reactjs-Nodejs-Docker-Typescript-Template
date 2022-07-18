@@ -20,7 +20,7 @@ const COLOR = {
 
 const CONSTANT = {
   ...COLOR,
-  ...POKEMON
+  ...POKEMON,
 };
 
 export default CONSTANT;

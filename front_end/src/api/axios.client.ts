@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const AxiosClient = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_HOST,
@@ -19,7 +20,7 @@ AxiosClient.interceptors.request.use(
   function (error) {
     // Do something with request error
     if (error.message) {
-      console.log('interceptors.request', error.message);
+      toast(error.message);
     }
     return Promise.reject(error);
   }
